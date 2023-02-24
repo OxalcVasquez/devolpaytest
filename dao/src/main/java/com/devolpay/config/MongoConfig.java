@@ -19,11 +19,11 @@ import java.util.Collections;
 @Configuration
 @EnableMongoRepositories(basePackages = "com.devolpay.dao")
 @ComponentScan(basePackages = {"com.devolpay.dao"})
-public class ConfigMongo extends AbstractMongoClientConfiguration {
+public class MongoConfig extends AbstractMongoClientConfiguration {
 
     public static final String MONGODB="devolpay";
 
-    @Value("${database.mongodb.string-conection}")
+    @Value("${database.mongodb.string-connection}")
     private String connectionString;
 
     @Value("${database.mongodb.database-name}")
@@ -32,6 +32,7 @@ public class ConfigMongo extends AbstractMongoClientConfiguration {
     @Bean
     public MongoClient mongoClient() {
         ConnectionString connectionString = new ConnectionString(this.connectionString);
+//      ConnectionString connectionString = new ConnectionString("mongodb://Oxalc:UvfOpsifkkDlIYj9@ac-oi477vz-shard-00-00.hseqwfn.mongodb.net:27017,ac-oi477vz-shard-00-01.hseqwfn.mongodb.net:27017,ac-oi477vz-shard-00-02.hseqwfn.mongodb.net:27017/?ssl=true&replicaSet=atlas-s317ur-shard-0&authSource=admin&retryWrites=true&w=majority");
         MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
                 .build();
@@ -42,6 +43,7 @@ public class ConfigMongo extends AbstractMongoClientConfiguration {
     @Override
     protected String getDatabaseName() {
         return this.databaseName;
+//        return "devolpay";
     }
 
     @Override

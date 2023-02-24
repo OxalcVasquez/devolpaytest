@@ -1,10 +1,8 @@
 package com.devolpay.entity;
 
-import com.devolpay.config.ConfigEntity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

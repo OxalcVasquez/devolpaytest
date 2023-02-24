@@ -11,6 +11,8 @@
     <modules>
         <module>entity</module>
         <module>dao</module>
+        <module>controller</module>
+        <module>service</module>
     </modules>
 
     <properties>
@@ -114,5 +116,4 @@
             <type>jar</type>
         </dependency>
     </dependencies>
-
 </project>

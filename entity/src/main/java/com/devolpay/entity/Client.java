@@ -9,9 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotEmpty;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 @Component
@@ -19,16 +16,13 @@ import java.io.Serializable;
 @Log4j2
 @EqualsAndHashCode(callSuper=false)
 @Data
-@Document
-public class Cliente  implements Serializable {
+@Document(collection = "client")
+public class Client implements Serializable {
 
     @Id
     private String id;
-    @NotEmpty
     private String nombres;
-    @NotEmpty
     private String apellidos;
-    @NotEmpty
     private String dni;
     private String telefono;
     private String direccion;
