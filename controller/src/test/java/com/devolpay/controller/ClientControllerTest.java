@@ -2,13 +2,9 @@ package com.devolpay.controller;
 
 import com.devolpay.config.ControllerConfig;
 import com.devolpay.entity.Client;
-import com.devolpay.service.impl.ClientService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.junit.runner.RunWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,46 +26,26 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 @ContextConfiguration(classes = { ControllerConfig.class })
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ClientControllerTest {
 
-    @Mock
-    private ClientService clientService;
 
-    @InjectMocks
-    private ClientController clientController;
-
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(clientController).build();
-    }
+    @Autowired
+    private TestRestTemplate restTemplate;
 
     @Test
-    public void testSaveCliente() throws Exception {
-        Client cliente = new Client();
-        cliente.setNombres("Test Client");
-        cliente.setDireccion("testclient@test.com");
+    public void testSaveClient() throws Exception {
+        Client client = new Client();
+        client.setNombres("Test Client");
+        client.setDireccion("testclient@test.com");
 
-        String jsonCliente = new ObjectMapper().writeValueAsString(cliente);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/clients/save")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(jsonCliente))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.nombres").value("Test Client"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.direccion").value("testclient@test.com"));
-    }
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        ResponseEntity<Client> response = restTemplate.postForEntity("/api/clients/save", client, Client.class);
+        assertEquals("Test",HttpStatus.CREATED, response.getStatusCode());
+        Client createdClient = response.getBody();
+        assertNotNull(createdClient.getId());
+        assertEquals("The client name is incorrect","Test Client", createdClient.getNombres());
+        assertEquals("The client email address is incorrect","testclient@test.com", createdClient.getDireccion());
     }
 
 }
